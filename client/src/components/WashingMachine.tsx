@@ -69,7 +69,11 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
       <Modal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        title="Washing Machine: 1"
+        title={`Washine Machine ${id}`}
+        id={id}
+        price={price}
+        size={size}
+        status={status}
       />
     </div>
   );

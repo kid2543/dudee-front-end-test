@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 
 interface ModalProps {
+  id: string;
   isOpen: boolean;
   onClose: () => void;
   title: string;
+  size: number;
+  price: number;
+  status: boolean;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
-  const [coin, setCoin] = useState(40);
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, id, size, price, status }) => {
+  const [coin, setCoin] = useState(price)
+  const startPrice = price
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6 relative">
-        <h2 className="text-xl font-bold mb-4">{title} (9kg)</h2>
+        <h2 className="text-xl font-bold mb-4">{title} ({size}KG)</h2>
         <div className="mb-4">
           <form>
             <div className="grid grid-cols-3 gap-4">
@@ -25,19 +30,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title }) => {
                   name="temp"
                   id="r-1"
                   value="cold"
+                  onChange={() => setCoin(startPrice)}
                 />
                 <label htmlFor="r-1" className="ms-2">
                   Cold
                 </label>
               </div>
               <div className="border px-3 rounded py-1">
-                <input type="radio" name="temp" id="r-2" value="warm" />
+                <input type="radio" name="temp" id="r-2" value="warm" onChange={() => setCoin(startPrice + 10)} />
                 <label htmlFor="r-2" className="ms-2">
                   Warm
                 </label>
               </div>
               <div className="border px-3 rounded py-1">
-                <input type="radio" name="temp" id="r-3" value="hot" />
+                <input type="radio" name="temp" id="r-3" value="hot" onChange={() => setCoin(startPrice + 20)} />
                 <label htmlFor="r-3" className="ms-2">
                   Hot
                 </label>
