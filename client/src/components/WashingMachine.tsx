@@ -2,6 +2,12 @@ import React, { useEffect, useState } from "react";
 import WashingMachineImage from "../assets/washing.png";
 import Modal from "./Modal";
 import { WashingMachineProps } from "../types/MachineInterfaces";
+import { sendLineAlert } from "../utils/sendAlert";
+
+interface Time {
+  minutes: number;
+  seconds: number;
+}
 
 const WashingMachine: React.FC<WashingMachineProps> = ({
   id,
@@ -13,10 +19,21 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
 }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const [time, setTime] = useState({ minutes: 2, seconds: 0 });
+  const [time, setTime] = useState<Time>({ minutes: 0, seconds: 0 });
+  const [isRuning, setIsRuning] = useState(false)
 
   useEffect(() => {
-    if (time.minutes === 0 && time.seconds === 0) return;
+    if(!isRuning) return
+    
+    if (time.minutes === 0 && time.seconds === 0) {
+      setIsRuning(false)
+      return
+    };
+
+    if(time.minutes === 1 && time.seconds === 0) {
+      const userId = "chris_badboy"
+      sendLineAlert(userId, "ผ้าที่ซักเหลืออีก 1 นาที")
+    }
 
     const interval = setInterval(() => {
       setTime((prev) => {
@@ -28,7 +45,7 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [time]);
+  }, [time, isRuning, id]);
 
   return (
     <div className="p-3 rounded border">
@@ -36,7 +53,7 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
         <h1 className="mb-3">
           Washing Machine: {id} ({size}KG)
         </h1>
-        {status ? (
+        {!isRuning ? (
           <div className="inline-flex items-center rounded-md bg-green-100 px-2 py-1 text-xs font-medium text-green-600 ring-1 ring-gray-500/10 ring-inset">
             Avaliable
           </div>
@@ -74,6 +91,10 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
         price={price}
         size={size}
         status={status}
+        setTime={setTime}
+        onStart={() => setIsRuning(true)}
+        minutes={minutes}
+        seconds={seconds}
       />
     </div>
   );
