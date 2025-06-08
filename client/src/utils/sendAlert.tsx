@@ -3,9 +3,6 @@ import axios from "axios";
 const LINE_API_URL = "https://api.line.me/v2/bot/message/push"
 const apiUrl = process.env.REACT_APP_ACCESS_TOKEN
 
-console.log(process.env.REACT_APP_TOKEN)
-console.log('token', apiUrl)
-
 interface LineMessage {
     to: string;
     message: { type: string; text: string} [];
