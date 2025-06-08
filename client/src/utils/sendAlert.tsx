@@ -18,7 +18,7 @@ export const sendLineAlert = async (groupId: string, alertMessage: string) => {
         await axios.post(LINE_API_URL, data, {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${apiUrl}`,
+                "Authorization": `Bearer ${apiUrl}`,
             }
         })
         console.log("Alert sent successfully")

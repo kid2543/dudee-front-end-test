@@ -22,6 +22,7 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
   const [time, setTime] = useState<Time>({ minutes: 0, seconds: 0 });
   const [isRuning, setIsRuning] = useState(false)
 
+
   useEffect(() => {
     if(!isRuning) return
     
@@ -31,8 +32,8 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
     };
 
     if(time.minutes === 1 && time.seconds === 0) {
-      const userId = "chris_badboy"
-      sendLineAlert(userId, "ผ้าที่ซักเหลืออีก 1 นาที")
+      const groupId = process.env.REACT_APP_GROUP_ID || ""
+      sendLineAlert(groupId, "ผ้าที่ซักเหลืออีก 1 นาที")
     }
 
     const interval = setInterval(() => {
