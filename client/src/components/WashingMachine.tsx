@@ -3,6 +3,7 @@ import WashingMachineImage from "../assets/washing.png";
 import Modal from "./Modal";
 import { WashingMachineProps } from "../types/MachineInterfaces";
 import { sendLineAlert } from "../utils/sendAlert";
+import { toast } from "react-toastify";
 
 interface Time {
   minutes: number;
@@ -20,20 +21,23 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
   const [isModalOpen, setModalOpen] = useState(false);
 
   const [time, setTime] = useState<Time>({ minutes: 0, seconds: 0 });
-  const [isRuning, setIsRuning] = useState(false)
-
+  const [isRuning, setIsRuning] = useState(false);
 
   useEffect(() => {
-    if(!isRuning) return
-    
-    if (time.minutes === 0 && time.seconds === 0) {
-      setIsRuning(false)
-      return
-    };
+    if (!isRuning) return;
 
-    if(time.minutes === 1 && time.seconds === 0) {
-      const groupId = process.env.REACT_APP_GROUP_ID || ""
-      sendLineAlert(groupId, "ผ้าที่ซักเหลืออีก 1 นาที")
+    if (time.minutes === 0 && time.seconds === 0) {
+      const groupId = process.env.REACT_APP_GROUP_ID || "";
+      sendLineAlert(groupId, `Cloth Washing Machine ${id} has been washed`);
+      toast(`Cloth Washing Machine ${id} has been washed`);
+      setIsRuning(false);
+      return;
+    }
+
+    if (time.minutes === 1 && time.seconds === 0) {
+      const groupId = process.env.REACT_APP_GROUP_ID || "";
+      sendLineAlert(groupId, `Washing Machine ${id} has 1 minute left to dry.`);
+      toast(`Washing Machine ${id} has 1 minute left to dry.`);
     }
 
     const interval = setInterval(() => {
@@ -60,7 +64,7 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
           </div>
         ) : (
           <div className="inline-flex items-center rounded-md bg-amber-50 px-2 py-1 text-xs font-medium text-amber-600 ring-1 ring-gray-500/10 ring-inset">
-            Unavaliable
+            Working
           </div>
         )}
       </div>
@@ -72,17 +76,19 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
         />
       </div>
       <div className="text-center">
-        <h1 className="font-bold text-xl">
+        <h1 className="font-bold text-xl mb-3">
           {time?.minutes} : {time?.seconds}
         </h1>
       </div>
       <div className="text-center">
-        <button
-          onClick={() => setModalOpen(true)}
-          className="bg-blue-200 text-blue-500 px-3 py-1 font-semibold rounded"
-        >
-          Ready to use
-        </button>
+        {!isRuning && (
+          <button
+            onClick={() => setModalOpen(true)}
+            className="bg-blue-200 text-blue-500 px-3 py-1 font-semibold rounded"
+          >
+            Ready to use
+          </button>
+        )}
       </div>
       <Modal
         isOpen={isModalOpen}
