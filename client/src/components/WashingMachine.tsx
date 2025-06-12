@@ -4,6 +4,7 @@ import Modal from "./Modal";
 import { WashingMachineProps } from "../types/MachineInterfaces";
 import { sendLineAlert } from "../utils/sendAlert";
 import { toast } from "react-toastify";
+import Spiner from "./Spiner";
 
 interface Time {
   minutes: number;
@@ -54,7 +55,7 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
 
   return (
     <div className="p-3 rounded border">
-      <div className=" flex justify-between">
+      <div className="flex justify-between">
         <h1 className="mb-3">
           Washing Machine: {id} ({size}KG)
         </h1>
@@ -69,11 +70,17 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
         )}
       </div>
       <div className="mb-3">
-        <img
-          src={WashingMachineImage}
-          alt="washing machine"
-          className="w-1/2 mx-auto"
-        />
+        {!isRuning ? (
+          <img
+            src={WashingMachineImage}
+            alt="washing machine"
+            className="w-1/2 mx-auto"
+          />
+        ) : (
+          <div className="">
+            <Spiner />
+          </div>
+        )}
       </div>
       <div className="text-center">
         <h1 className="font-bold text-xl mb-3">
@@ -93,7 +100,7 @@ const WashingMachine: React.FC<WashingMachineProps> = ({
       <Modal
         isOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
-        title={`Washine Machine ${id}`}
+        title={`Washing Machine ${id}`}
         id={id}
         price={price}
         size={size}
